@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Product</title>
+</head>
+<body>
+<?php require 'view/html/header.phtml'; ?>
+<table border="1px" width="100%" style="margin-bottom:10px";>
+	<tr>
+		<th>Product Grid</th>
+		<th> <button> <a href="Index.php?a=add&c=product">ADD</a> </button></th>
+	</tr>
+</table>
+<table border="2px" width="100%">
+	<tr>
+		<th>PRODUCT ID</th>
+		<th>PRODUCT NAME</th>
+		<th>COST</th>
+		<th>PRICE</th>
+		<th>SKU</th>
+		<th>STATUS</th>
+			<th>QUANTITY</th>
+			<th>CREATED AT</th>
+			<th>UPDATED AT</th>
+			<th>EDIT</th>
+			<th>DELETE</th>
+		</tr>
+		<?php foreach ($products as $value): ?>
+			<tr>
+				<td><?php echo $value['product_id']; ?></td>
+				<td><?php echo $value['name']; ?></td>
+				<td><?php echo $value['cost']; ?></td>
+				<td><?php echo $value['price']; ?></td>
+				<td><?php echo $value['sku']; ?></td>
+				<td><?php echo $value['status']; ?></td>
+				<td><?php echo $value['quantity']; ?></td>
+				<td><?php echo $value['created_at']; ?></td>
+				<td><?php echo $value['updated_at']; ?></td>
+				<td> <a href="Index.php?c=product&a=edit&id=<?php echo $value['product_id']; ?>">EDIT</a> </td>
+				<td> <a href="Index.php?c=product&a=delete&id=<?php echo $value['product_id']; ?>">DELETE</a> </td>
+			</tr>
+	<?php endforeach; ?>
+</table>
+</body>
+</html>
+<!-- <?php require 'view/html/footer.phtml'; ?> -->
