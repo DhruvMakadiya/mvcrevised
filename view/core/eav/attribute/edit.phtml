@@ -1,0 +1,140 @@
+<?php
+$attribute = $this->getCollection();
+$attributeOptions = $this->getAttributeOption();
+$entityTypes = Ccc::getModel('Core_Eav_Attribute')->getEntityType();
+?>
+
+<form action="<?php echo $this->getUrl('save','eav_attribute');?>" method="post">
+	<table class="table table-striped">
+		<tr>
+			Attribute
+		</tr>
+		<tr>
+			<th><a type="button" class="btn btn-primary" href="<?php echo $this->getUrl('grid','eav_attribute',[],true);?>" >Cancel</a></th>
+			<th><button type="submit" name="submit" value="save" >Save</button></th>			
+		</tr>
+	</table>
+
+<table class="table table-striped">
+	<tr>
+	Attribute INFORMATION
+	</tr> 
+	<tr>
+		<td>Entity Type</td>
+		<td>
+		<select name="attribute[entity_type_id]">
+		<?php foreach ($entityTypes as $key => $value): ?>
+		<option value="<?php echo $key ?>" <?php echo ($attribute->entity_type_id == $key)? 'selected' :''?>> <?php echo $value ?></option>	
+		<?php endforeach; ?>
+		</select>
+		</td>
+
+	</tr>
+	<tr>
+		<td>code</td>
+		<td><input type="text" name="attribute[code]" value="<?php echo $attribute->code; ?>" class="addi9"></td>
+	</tr>
+	<tr>
+		<td>input_type</td>
+		<td><select name="attribute[input_type]" onchange="changeInputType(this)" id="selectInputType">
+			<option value="textbox" <?php echo ($attribute->input_type == 'textbox')? 'selected' :''?>>Text Box</option>
+			<option value="textarea" <?php echo ($attribute->input_type == 'textarea')? 'selected' :''?>> textarea</option>
+			<option value="select" <?php echo ($attribute->input_type == 'select')? 'selected' :''?>>select</option>
+			<option value="multiselect" <?php echo ($attribute->input_type == 'multiselect')? 'selected' :''?>>multi select</option>
+		</td>
+	</tr>
+	<tr>
+
+		<td>backend_type</td>
+		<td><select name="attribute[backend_type]">
+			<option value="int" <?php echo ($attribute->backend_type == 'int')? 'selected' :''?>>int</option>
+			<option value="varchar" <?php echo ($attribute->backend_type == 'varchar')? 'selected' :''?>> varchar</option>
+			<option value="decimal" <?php echo ($attribute->backend_type == 'decimal')? 'selected' :''?>>decimal</option>
+			<option value="text" <?php echo ($attribute->backend_type == 'text')? 'selected' :''?>>text</option>
+		</td>
+	</tr>
+	<tr>
+		<td>name</td>
+		<td><input type="text" name="attribute[name]" value=" <?php echo $attribute->name; ?>" class="addi9"></td>
+	</tr>
+	<td>status</td>
+	<td>
+	<select name="attribute[status]">
+		<?php foreach ($attribute->getResource()->getStatusOptions() as $key => $value):?>
+		<?php $selected = ($key == $attribute->getstatus()) ? 'selected' : '';?>
+		<option value="<?php echo $key ?>"<?php echo $selected; ?>><?php echo $value;?></option>
+		<?php endforeach;?>
+	</select>
+	</td>
+	</td>
+	<tr>
+		<td>backend_model</td>
+		<td><input type="text" name="attribute[backend_model]" value=" <?php echo $attribute->backend_model; ?>" class="addi9"></td>
+	</tr>
+				
+
+</table>
+
+<div style="border: 1px solid red;  display: none;" id="inputTypeOptionDiv">
+	
+	<table border="1">
+		<thead>
+		<tr>
+			<th>Option</th>
+			<th>Position</th>
+			<th><input type="button" name="add" value="ADD" id="addOption"></th>
+		</tr>
+		</thead>
+		<tbody id="inputTypeOptionTable">
+				<?php if($attributeOptions) : ?>
+
+			<?php  foreach ($attributeOptions->getData() as $attributeOption) :?>
+		<tr>
+			<td><input type="text" name="option[exits][name][<?php echo $attributeOption->option_id; ?>]" value ="<?php echo $attributeOption->name;?>"/></td>
+			<td><input type="text" name="option[exits][position][<?php echo $attributeOption->option_id; ?>]" value ="<?php echo $attributeOption->position;?>"/></td>
+			<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
+		</tr>
+			<?php endforeach; ?>
+		<?php endif; ?>
+	</tbody>
+	</table>
+</div>
+</form>
+	<table style="display: none;" >
+		<tbody id="inputTypeOptionDefault">
+		<tr>
+			<td><input type="text" name="option[new][name][]"></td>
+			<td><input type="text" name="option[new][position][]"></td>
+			<td><input type="button" name="remove" value="REMOVE1" class="removeOption"></td>
+		</tr>
+		</tbody>
+	</table>
+<!-- </div> -->
+
+<script type="text/javascript">
+	
+	$(".removeOption").click(function(){
+		console.log($(this).parent().parent().remove());
+	})
+
+	$("#addOption").click(function(){
+		// alert(1);
+		$('#inputTypeOptionTable').prepend($('#inputTypeOptionDefault').html());
+		console.log($('#inputTypeOptionDefault').html());
+	})
+
+
+	$('#selectInputType').change(function(){
+		var inputType = $(this);
+		if (inputType.val() == 'select' || inputType.val() == 'multiselect')  {
+			$('#inputTypeOptionDiv').show();
+		}
+		else{
+			$('#inputTypeOptionDiv').hide();
+		}
+	});
+
+	$(document).ready(function(){
+	$('#selectInputType').trigger('change');
+    });
+</script>
